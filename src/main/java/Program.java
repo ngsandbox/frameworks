@@ -1,6 +1,6 @@
 public class Program {
 
-    private static final int LIMIT = 2;
+    private static final int LIMIT = 10;
 
     /**
      * Code sample from Mastering Hazelcast (3.5 ICondition)
