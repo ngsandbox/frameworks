@@ -1,2 +1,4 @@
-rootProject.name = 'condition'
+rootProject.name = 'frameworks'
+
+include 'common', 'hazelcast', 'zookeeper'
 

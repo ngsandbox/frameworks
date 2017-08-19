@@ -1,40 +1,38 @@
-group 'codesample'
-version '0.1'
-
-apply plugin: 'java'
-apply plugin: 'com.github.johnrengelman.shadow'
-
-sourceCompatibility = 1.8
+group 'org.frameworks'
+version project['version']
 
 repositories {
     mavenCentral()
 }
 
-buildscript{
-    repositories{
-        mavenLocal()
-        maven {url 'https://plugins.gradle.org/m2'}
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url 'https://plugins.gradle.org/m2' }
     }
-    dependencies{
+    dependencies {
         classpath group: 'com.github.jengelman.gradle.plugins', name: 'shadow', version: '2.0.1'
     }
 }
 
-shadowJar{
-    baseName = 'condition-sample'
-    classifier = null
-    version = null
-    manifest {
-        attributes('Main-Class': 'Program')
+subprojects {
+    apply plugin: 'java'
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    repositories {
+        mavenCentral()
     }
-    dependencies{
+
+    dependencies {
+        compile (group: 'org.slf4j', name: 'slf4j-api', version: project['slf4j.version'])
+        compile (group: 'org.slf4j', name: 'jul-to-slf4j', version: project['slf4j.version'])
+        compile (group: 'ch.qos.logback', name: 'logback-classic', version: project['logback.version'])
+
+
+        testCompile "org.junit.jupiter:junit-jupiter-api:5.0.0-M4"
+        testCompile "org.junit.jupiter:junit-jupiter-engine:5.0.0-M4"
+        testCompile "org.junit.platform:junit-platform-launcher:1.0.0-M4"
     }
-}
-
-
-dependencies {
-    // https://mvnrepository.com/artifact/com.hazelcast/hazelcast-all
-    compile group: 'com.hazelcast', name: 'hazelcast-all', version: '3.8.4'
-
-    testCompile group: 'junit', name: 'junit', version: '4.12'
 }

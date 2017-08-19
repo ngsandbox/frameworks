@@ -1,0 +1,22 @@
+apply plugin: 'com.github.johnrengelman.shadow'
+
+sourceCompatibility = 1.8
+
+shadowJar{
+    baseName = 'hazelcast-condition'
+    classifier = null
+    version = null
+    manifest {
+        attributes('Main-Class': 'org.frameworks.hazelcast.Program')
+    }
+    dependencies{
+    }
+}
+
+
+dependencies {
+    compile project(':common')
+    compile group: 'com.hazelcast', name: 'hazelcast-all', version: project['hazelcast.version']
+
+    testCompile group: 'junit', name: 'junit', version: project['junit.version']
+}
