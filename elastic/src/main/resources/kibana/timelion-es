@@ -1,0 +1,15 @@
+.es(index=publish-quote,q="prices.volume:0", metric="min:prices.bid", timefield='created').bars(stack=false).yaxis(min=30).color("red").label("Publish bid"),
+.es(index=base-quote,q="prices.volume:0", metric="min:prices.bid", timefield='created').bars(stack=false).yaxis(min=30).label("Base bid").legend(columns=4, position=nw),
+.es(index=base-quote,q="prices.volume:0", metric="min:prices.offer", timefield='created').label("Base ffer").bars(stack=false).color("red"),
+.es(index=publish-quote,q="prices.volume:0", metric="min:prices.offer", timefield='created').bars(stack=false).label("Publish offer").color("white")
+
+
+
+.es(index=publish-quote,q='symbol.keyword:"USD/RUB" AND prices.volume:0', metric="min:prices.bid", split="tier.keyword:5", timefield='created').lines(fill=1).color("red:green:orange:yellow:purple").yaxis(1), 
+.es(index=base-quote,q='symbol.keyword:"USD/RUB" AND prices.volume:0', metric="min:prices.bid", timefield='created').lines(fill=5).color("blue").yaxis(2),  
+.es(index=base-quote,q='symbol.keyword:"USD/RUB" AND prices.volume:0', metric="min:prices.offer", timefield='created').multiply(-1).lines(fill=5).color("blue").yaxis(2), 
+.es(index=publish-quote,q='symbol.keyword:"USD/RUB" AND prices.volume:0', metric="min:prices.offer", split="tier.keyword:5", timefield='created').multiply(-1).lines(fill=1).color("red:green:orange:yellow:purple").yaxis(1)
+
+
+
+

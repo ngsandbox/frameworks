@@ -1,0 +1,35 @@
+group 'org.frameworks'
+version '00.001.00'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.8.RELEASE")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'war'
+apply plugin: 'org.springframework.boot'
+
+jar {
+    baseName = 'ngsanbox-rest-service'
+    version =  project.version
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.16.18'
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+}

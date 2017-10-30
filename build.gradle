@@ -26,6 +26,9 @@ subprojects {
     }
 
     dependencies {
+
+        compile files('./libs/java-naoqi-sdk-2.1.4.13-linux32.jar')
+
         compile (group: 'org.slf4j', name: 'slf4j-api', version: project['slf4j.version'])
         compile (group: 'org.slf4j', name: 'jul-to-slf4j', version: project['slf4j.version'])
         compile (group: 'ch.qos.logback', name: 'logback-classic', version: project['logback.version'])
