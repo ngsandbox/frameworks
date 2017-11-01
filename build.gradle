@@ -31,8 +31,10 @@ subprojects {
 
         compile (group: 'org.slf4j', name: 'slf4j-api', version: project['slf4j.version'])
         compile (group: 'org.slf4j', name: 'jul-to-slf4j', version: project['slf4j.version'])
+        compile (group: 'org.slf4j', name: 'jcl-over-slf4j', version: project['slf4j.version'])
         compile (group: 'ch.qos.logback', name: 'logback-classic', version: project['logback.version'])
 
+        compileOnly group: 'org.projectlombok', name: 'lombok', version: project['lombok.version']
 
         testCompile "org.junit.jupiter:junit-jupiter-api:5.0.0-M4"
         testCompile "org.junit.jupiter:junit-jupiter-engine:5.0.0-M4"
