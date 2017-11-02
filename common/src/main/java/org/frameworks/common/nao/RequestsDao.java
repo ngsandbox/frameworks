@@ -24,4 +24,6 @@ public interface RequestsDao {
     void saveFile(FileInfo fileInfo);
 
     List<String> getReqInfoIds();
+
+    FileInfo getLastFile(String reqId);
 }

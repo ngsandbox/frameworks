@@ -24,12 +24,12 @@ public class HazelService implements AutoCloseable {
                 .setNetworkConfig(new NetworkConfig().setJoin(new JoinConfig().setTcpIpConfig(new TcpIpConfig().addMember("127.0.0.1"))))
                 .addMapConfig(new MapConfig().setName(REQUESTS_INFO_MAP)
                         .setMapEvictionPolicy(new LRUEvictionPolicy())
-                        .setMaxSizeConfig(new MaxSizeConfig().setSize(100))
+                        .setMaxSizeConfig(new MaxSizeConfig().setSize(500))
                         .setMaxIdleSeconds(3000)
                         .setTimeToLiveSeconds(300))
                 .addMapConfig(new MapConfig().setName(FILES_INFO_MAP)
                         .setMapEvictionPolicy(new LRUEvictionPolicy())
-                        .setMaxSizeConfig(new MaxSizeConfig().setSize(50))
+                        .setMaxSizeConfig(new MaxSizeConfig().setSize(500))
                         .setMaxIdleSeconds(3000)
                         .setTimeToLiveSeconds(300));
         hz = Hazelcast.newHazelcastInstance(hazelCfg);

@@ -50,20 +50,30 @@ public class HazelRequestsDaoImpl implements RequestsDao {
 
 
     @Override
-    public List<FileInfo> getFiles(@NonNull String reqId) {
-        return hazelService.getFilesMap().get(reqId);
+    public LinkedList<FileInfo> getFiles(@NonNull String reqId) {
+        List<FileInfo> files = hazelService.getFilesMap().get(reqId);
+        if (files == null) {
+            return new LinkedList<>();
+        }
+
+        return new LinkedList<>(files);
     }
 
     @Override
     public void saveFile(@NonNull FileInfo fileInfo) {
-        List<FileInfo> files = new LinkedList<>();
-        files = hazelService.getFilesMap().putIfAbsent(fileInfo.getReqId(),files);
-
-        hazelService.getFilesMap().put(fileInfo.getReqId(),files);
+        LinkedList<FileInfo> files = getFiles(fileInfo.getReqId());
+        files.addLast(fileInfo);
+        hazelService.getFilesMap().put(fileInfo.getReqId(), files);
     }
 
     @Override
     public List<String> getReqInfoIds() {
         return new ArrayList<>(hazelService.getRequestsMap().keySet());
+    }
+
+    @Override
+    public FileInfo getLastFile(@NonNull String reqId) {
+        LinkedList<FileInfo> files = getFiles(reqId);
+        return files.isEmpty() ? null : files.getLast();
     }
 }

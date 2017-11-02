@@ -4,10 +4,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Builder
 @Getter
 @Setter
-public class RequestInfo {
+public class RequestInfo implements Serializable {
     private String id;
     private RequestStatus status;
 

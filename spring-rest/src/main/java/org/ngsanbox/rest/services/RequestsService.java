@@ -5,7 +5,6 @@ import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.frameworks.common.nao.RequestsDao;
 import org.frameworks.common.nao.entities.FileInfo;
 import org.frameworks.common.nao.entities.RequestInfo;
-import org.frameworks.common.nao.entities.RequestStatus;
 import org.ngsanbox.rest.adapters.FileAdapter;
 import org.ngsanbox.rest.exceptions.FileProcessError;
 import org.ngsanbox.rest.exceptions.RequestNotFound;
@@ -18,17 +17,11 @@ import javax.validation.constraints.NotNull;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Service
 public class RequestsService {
-
-    private static final Map<String, RequestInfo> requests = new ConcurrentHashMap<>();
 
     private final RequestsDao requestsDao;
 
@@ -45,23 +38,22 @@ public class RequestsService {
         return requestsDao.getReqInfo(reqId);
     }
 
-    public String saveFile(String reqId, @NotNull FileAdapter fileAdapter) {
+    public FileInfo saveFile(String reqId, @NotNull FileAdapter fileAdapter) {
         log.debug("Saving file content {} for request id {}", reqId, fileAdapter.getFilename());
         RequestInfo requestInfo = requestsDao.handleReqInfo(reqId);
-        FileInfo fileInfo = FileInfo.builder().reqId(reqId).fileName(fileAdapter.getFilename()).fileBody(fileAdapter.getContent()).build();
+        FileInfo fileInfo = FileInfo.builder().reqId(requestInfo.getId()).fileName(fileAdapter.getFilename()).fileBody(fileAdapter.getContent()).build();
         requestsDao.saveFile(fileInfo);
-        return requestInfo.getId();
+        return fileInfo;
     }
 
-    private InputStream getFileStream(String id) {
-        log.debug("Try to get file stream by id {}", id);
-        RequestInfo info = getRequestInfo(id);
-        if (info == null) {
-            throw new RequestNotFound("Request not found by id: " + id);
+    private InputStream getFileStream(String reqId) {
+        log.debug("Try to get file stream by id {}", reqId);
+        FileInfo fileInfo = requestsDao.getLastFile(reqId);
+        if (fileInfo == null) {
+            throw new RequestNotFound("File not found for request id : " + reqId);
         }
 
-        return new ByteArrayInputStream(info.getFileBody());
-
+        return new ByteArrayInputStream(fileInfo.getFileBody());
     }
 
     public void outputImageStream(String id, HttpServletResponse response) {

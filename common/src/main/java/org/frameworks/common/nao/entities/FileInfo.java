@@ -4,10 +4,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Builder
 @Getter
 @Setter
-public class FileInfo {
+public class FileInfo implements Serializable {
 
     private String reqId;
     private String fileName;
