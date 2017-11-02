@@ -2,11 +2,14 @@ package org.ngsanbox.rest.services;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.frameworks.common.nao.RequestsDao;
+import org.frameworks.common.nao.entities.FileInfo;
+import org.frameworks.common.nao.entities.RequestInfo;
+import org.frameworks.common.nao.entities.RequestStatus;
 import org.ngsanbox.rest.adapters.FileAdapter;
-import org.ngsanbox.rest.entities.RequestInfo;
-import org.ngsanbox.rest.entities.RequestStatus;
 import org.ngsanbox.rest.exceptions.FileProcessError;
 import org.ngsanbox.rest.exceptions.RequestNotFound;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
@@ -27,35 +30,26 @@ public class RequestsService {
 
     private static final Map<String, RequestInfo> requests = new ConcurrentHashMap<>();
 
+    private final RequestsDao requestsDao;
+
+    @Autowired
+    public RequestsService(RequestsDao requestsDao) {
+        this.requestsDao = requestsDao;
+    }
+
     public List<String> getRequestsIds() {
-        return new ArrayList<>(requests.keySet());
+        return requestsDao.getReqInfoIds();
     }
 
-    public RequestInfo getRequestInfo(String id) {
-        return requests.get(id);
+    public RequestInfo getRequestInfo(String reqId) {
+        return requestsDao.getReqInfo(reqId);
     }
 
-    private RequestInfo handleRequestInfo(String id) {
-        if (id == null) {
-            id = UUID.randomUUID().toString();
-            log.trace("Create new request info for id {}", id);
-            RequestInfo requestInfo = RequestInfo.builder()
-                    .id(id)
-                    .status(RequestStatus.Initialized).build();
-            requests.put(requestInfo.getId(), requestInfo);
-            log.trace("Request info for id {} created. {}", id, requestInfo);
-            return requestInfo;
-        } else {
-            log.trace("Receive request info for id {}", id);
-            return getRequestInfo(id);
-        }
-    }
-
-    public String saveFile(String id, @NotNull FileAdapter fileAdapter) {
-        log.debug("Saving file content {} for request id {}", id, fileAdapter.getFilename());
-        RequestInfo requestInfo = handleRequestInfo(id);
-        requestInfo.setFileName(fileAdapter.getFilename());
-        requestInfo.setFileBody(fileAdapter.getContent());
+    public String saveFile(String reqId, @NotNull FileAdapter fileAdapter) {
+        log.debug("Saving file content {} for request id {}", reqId, fileAdapter.getFilename());
+        RequestInfo requestInfo = requestsDao.handleReqInfo(reqId);
+        FileInfo fileInfo = FileInfo.builder().reqId(reqId).fileName(fileAdapter.getFilename()).fileBody(fileAdapter.getContent()).build();
+        requestsDao.saveFile(fileInfo);
         return requestInfo.getId();
     }
 
