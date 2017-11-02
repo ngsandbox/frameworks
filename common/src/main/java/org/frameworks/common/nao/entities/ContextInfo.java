@@ -9,13 +9,13 @@ import java.io.Serializable;
 @Builder
 @Getter
 @Setter
-public class RequestInfo implements Serializable {
+public class ContextInfo implements Serializable {
     private String id;
-    private RequestStatus status;
+    private ContextStatus status;
 
     @Override
     public String toString() {
-        return "RequestInfo: {" +
+        return "ContextInfo: {" +
                 " id: " + id +
                 ", status: " + status +
                 " }";

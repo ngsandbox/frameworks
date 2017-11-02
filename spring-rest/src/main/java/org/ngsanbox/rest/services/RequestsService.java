@@ -1,10 +1,13 @@
 package org.ngsanbox.rest.services;
 
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.frameworks.common.nao.RequestsDao;
+import org.frameworks.common.nao.ContextDao;
+import org.frameworks.common.nao.entities.ContextInfo;
 import org.frameworks.common.nao.entities.FileInfo;
-import org.frameworks.common.nao.entities.RequestInfo;
+import org.frameworks.common.nao.entities.ContextStatus;
+import org.frameworks.common.nao.entities.QuestionInfo;
 import org.ngsanbox.rest.adapters.FileAdapter;
 import org.ngsanbox.rest.exceptions.FileProcessError;
 import org.ngsanbox.rest.exceptions.RequestNotFound;
@@ -23,32 +26,35 @@ import java.util.List;
 @Service
 public class RequestsService {
 
-    private final RequestsDao requestsDao;
+    private final ContextDao contextDao;
 
     @Autowired
-    public RequestsService(RequestsDao requestsDao) {
-        this.requestsDao = requestsDao;
+    public RequestsService(ContextDao contextDao) {
+        this.contextDao = contextDao;
     }
 
     public List<String> getRequestsIds() {
-        return requestsDao.getReqInfoIds();
+        return contextDao.getContextIds();
     }
 
-    public RequestInfo getRequestInfo(String reqId) {
-        return requestsDao.getReqInfo(reqId);
+    public ContextInfo getRequestInfo(String contId) {
+        return contextDao.getContext(contId);
     }
 
-    public FileInfo saveFile(String reqId, @NotNull FileAdapter fileAdapter) {
-        log.debug("Saving file content {} for request id {}", reqId, fileAdapter.getFilename());
-        RequestInfo requestInfo = requestsDao.handleReqInfo(reqId);
-        FileInfo fileInfo = FileInfo.builder().reqId(requestInfo.getId()).fileName(fileAdapter.getFilename()).fileBody(fileAdapter.getContent()).build();
-        requestsDao.saveFile(fileInfo);
-        return fileInfo;
+    public ContextInfo saveFile(String contId, @NotNull FileAdapter fileAdapter) {
+        log.debug("Saving file content {} for request id {}", contId, fileAdapter.getFilename());
+        ContextInfo contextInfo = contextDao.handleContext(contId);
+        FileInfo fileInfo = FileInfo.builder().reqId(contextInfo.getId()).fileName(fileAdapter.getFilename()).fileBody(fileAdapter.getContent()).build();
+        contextDao.saveFile(fileInfo);
+        contextInfo.setStatus(ContextStatus.ImageProcessWaiting);
+        log.debug("Changed request status {} ", contextInfo);
+        contextDao.saveContext(contextInfo);
+        return contextInfo;
     }
 
     private InputStream getFileStream(String reqId) {
         log.debug("Try to get file stream by id {}", reqId);
-        FileInfo fileInfo = requestsDao.getLastFile(reqId);
+        FileInfo fileInfo = contextDao.getFile(reqId);
         if (fileInfo == null) {
             throw new RequestNotFound("File not found for request id : " + reqId);
         }
@@ -67,4 +73,12 @@ public class RequestsService {
         }
     }
 
+    public QuestionInfo answer2Question(String id, @NonNull String question) {
+        ContextInfo contextInfo = contextDao.handleContext(id);
+        QuestionInfo questionInfo = QuestionInfo.builder().contextInfo(contextInfo).question(question).answer("Hello!").build();
+        contextInfo.setStatus(ContextStatus.Answer2Question);
+        contextDao.saveContext(contextInfo);
+        log.trace("Generated answer to the question {}", questionInfo);
+        return questionInfo;
+    }
 }

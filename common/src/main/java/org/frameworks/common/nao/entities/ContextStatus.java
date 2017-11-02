@@ -1,7 +1,7 @@
 package org.frameworks.common.nao.entities;
 
-public enum RequestStatus{
+public enum ContextStatus {
     Initialized,
     ImageProcessWaiting,
-    VoiceRecognitionWaiting
+    Answer2Question
 }
