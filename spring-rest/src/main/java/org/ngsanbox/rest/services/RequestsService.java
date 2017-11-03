@@ -46,7 +46,7 @@ public class RequestsService {
         ContextInfo contextInfo = contextDao.handleContext(contId);
         FileInfo fileInfo = FileInfo.builder().reqId(contextInfo.getId()).fileName(fileAdapter.getFilename()).fileBody(fileAdapter.getContent()).build();
         contextDao.saveFile(fileInfo);
-        contextInfo.setStatus(ContextStatus.ImageProcessWaiting);
+        contextInfo.setStatus(ContextStatus.ImageProcessing);
         log.debug("Changed request status {} ", contextInfo);
         contextDao.saveContext(contextInfo);
         return contextInfo;

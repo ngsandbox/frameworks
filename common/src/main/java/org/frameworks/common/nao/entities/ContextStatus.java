@@ -2,6 +2,6 @@ package org.frameworks.common.nao.entities;
 
 public enum ContextStatus {
     Initialized,
-    ImageProcessWaiting,
+    ImageProcessing,
     Answer2Question
 }
