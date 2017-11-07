@@ -4,4 +4,5 @@ include 'common', 'hazelcast', 'zookeeper'
 include 'nao'
 include 'elastic'
 include 'spring-rest'
+include 'nlp'
 
