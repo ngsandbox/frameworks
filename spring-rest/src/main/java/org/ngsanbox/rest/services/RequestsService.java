@@ -8,6 +8,8 @@ import org.frameworks.common.nao.entities.ContextInfo;
 import org.frameworks.common.nao.entities.FileInfo;
 import org.frameworks.common.nao.entities.ContextStatus;
 import org.frameworks.common.nao.entities.QuestionInfo;
+import org.frameworks.common.nlp.NlpService;
+import org.frameworks.common.nlp.entities.Word;
 import org.ngsanbox.rest.adapters.FileAdapter;
 import org.ngsanbox.rest.exceptions.FileProcessError;
 import org.ngsanbox.rest.exceptions.RequestNotFound;
@@ -27,10 +29,12 @@ import java.util.List;
 public class RequestsService {
 
     private final ContextDao contextDao;
+    private final NlpService nlpService;
 
     @Autowired
-    public RequestsService(ContextDao contextDao) {
+    public RequestsService(ContextDao contextDao, NlpService nlpService) {
         this.contextDao = contextDao;
+        this.nlpService = nlpService;
     }
 
     public List<String> getRequestsIds() {
@@ -75,9 +79,14 @@ public class RequestsService {
 
     public QuestionInfo answer2Question(String id, @NonNull String question) {
         ContextInfo contextInfo = contextDao.handleContext(id);
-        QuestionInfo questionInfo = QuestionInfo.builder().contextInfo(contextInfo).question(question).answer("Hello!").build();
+        QuestionInfo questionInfo = QuestionInfo.builder()
+                .contextInfo(contextInfo)
+                .question(question)
+                .part(nlpService.processSentence(question))
+                .answer("Hello!").build();
         contextInfo.setStatus(ContextStatus.Answer2Question);
         contextDao.saveContext(contextInfo);
+
         log.trace("Generated answer to the question {}", questionInfo);
         return questionInfo;
     }

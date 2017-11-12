@@ -1,4 +1,4 @@
-package org.ngsandbox.snlp;
+package org.ngsandbox.nlp.snlp;
 
 import edu.stanford.nlp.ie.crf.CRFClassifier;
 import edu.stanford.nlp.process.PTBTokenizer;

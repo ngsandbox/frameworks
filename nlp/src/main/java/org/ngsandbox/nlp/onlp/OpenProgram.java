@@ -1,8 +1,6 @@
-package org.ngsandbox.onlp;
+package org.ngsandbox.nlp.onlp;
 
 //import opennlp.tools.doccat.DoccatModel;
-
-import java.io.InputStream;
 
 public class OpenProgram {
     public static void main(String... args) throws Exception {

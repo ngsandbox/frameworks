@@ -10,6 +10,7 @@ repositories {
 }
 
 dependencies {
+    compile project(":common")
     compile files('/opt/nlp/stanford-corenlp-full/stanford-corenlp-3.8.0-models.jar')
 
     compile group: 'org.apache.opennlp', name: 'opennlp-tools', version: '1.8.3'

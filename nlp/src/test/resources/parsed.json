@@ -1,0 +1,108 @@
+{
+  "contextInfo": {
+    "id": "108df97a-88b0-4bf8-81dd-3f25dd69ac93",
+    "status": "Answer2Question",
+    "word": {
+      "tag": "ROOT",
+      "label": null,
+      "word": null,
+      "children": [
+        {
+          "tag": "SBARQ",
+          "label": "Direct question introduced by wh-element ",
+          "word": null,
+          "children": [
+            {
+              "tag": "WHNP",
+              "label": "Wh-noun phrase ",
+              "word": null,
+              "children": [
+                {
+                  "tag": "WP",
+                  "label": "Wh-pronoun ",
+                  "word": null,
+                  "children": [
+                    {
+                      "tag": null,
+                      "label": null,
+                      "word": "What",
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "tag": "SQ",
+              "label": "Yes/no questions and subconstituent of SBARQ excluding wh-element ",
+              "word": null,
+              "children": [
+                {
+                  "tag": "VBZ",
+                  "label": "Verb, 3rd person singular present ",
+                  "word": null,
+                  "children": [
+                    {
+                      "tag": null,
+                      "label": null,
+                      "word": "is",
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "tag": "NP",
+                  "label": "Noun phrase ",
+                  "word": null,
+                  "children": [
+                    {
+                      "tag": "PRP$",
+                      "label": "Possessive pronoun ",
+                      "word": null,
+                      "children": [
+                        {
+                          "tag": null,
+                          "label": null,
+                          "word": "your",
+                          "children": []
+                        }
+                      ]
+                    },
+                    {
+                      "tag": "NN",
+                      "label": "Noun, singular or mass ",
+                      "word": null,
+                      "children": [
+                        {
+                          "tag": null,
+                          "label": null,
+                          "word": "name",
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "tag": ".",
+              "label": null,
+              "word": null,
+              "children": [
+                {
+                  "tag": null,
+                  "label": null,
+                  "word": "?",
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "question": "What is your name?",
+  "answer": "Hello!"
+}
