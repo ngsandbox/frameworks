@@ -1,8 +1,5 @@
 rootProject.name = 'frameworks'
 
-include 'common', 'hazelcast', 'zookeeper'
-include 'nao'
-include 'elastic'
-include 'spring-rest'
+include 'common', 'hazelcast', 'zookeeper', 'nao', 'elastic', 'spring-rest'
 include 'nlp'
 

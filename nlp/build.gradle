@@ -10,8 +10,11 @@ repositories {
 }
 
 dependencies {
-    // https://mvnrepository.com/artifact/org.apache.opennlp/opennlp-tools
+    compile files('/opt/nlp/stanford-corenlp-full/stanford-corenlp-3.8.0-models.jar')
+
     compile group: 'org.apache.opennlp', name: 'opennlp-tools', version: '1.8.3'
+    compile group: 'edu.stanford.nlp', name: 'stanford-corenlp', version: '3.8.0'
+    compile group: 'edu.stanford.nlp', name: 'stanford-parser', version: '3.8.0'
 
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
