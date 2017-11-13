@@ -1,4 +1,4 @@
-group 'frameworks'
+group 'ngsandbox'
 version '0.1'
 
 apply plugin: 'java'

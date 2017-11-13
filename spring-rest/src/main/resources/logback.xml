@@ -10,7 +10,13 @@
     <logger name="org.springframework" level="warn">
         <appender-ref ref="STDOUT" />
     </logger>
-    <logger name="org.ngsanbox" level="trace" additivity="true">
+    <logger name="org.ngsanbox.*" level="trace">
+        <appender-ref ref="STDOUT" />
+    </logger>
+    <logger name="org.ngsanbox" level="trace">
+        <appender-ref ref="STDOUT" />
+    </logger>
+    <logger name="org.ngsanbox.nlp" level="trace">
         <appender-ref ref="STDOUT" />
     </logger>
     <root level="info">

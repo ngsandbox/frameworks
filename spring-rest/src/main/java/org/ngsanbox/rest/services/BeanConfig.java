@@ -1,9 +1,9 @@
 package org.ngsanbox.rest.services;
 
-import org.frameworks.common.nao.ContextDao;
-import org.frameworks.common.nlp.NlpService;
-import org.frameworks.hazelcast.HazelContextDaoImpl;
-import org.frameworks.hazelcast.HazelService;
+import org.ngsandbox.common.nao.ContextDao;
+import org.ngsandbox.common.nlp.NlpService;
+import org.ngsandbox.hazelcast.HazelContextDaoImpl;
+import org.ngsandbox.hazelcast.HazelService;
 import org.ngsandbox.nlp.NlpServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;

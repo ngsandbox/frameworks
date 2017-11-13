@@ -3,11 +3,11 @@ package org.ngsandbox.nlp;
 import edu.stanford.nlp.simple.Sentence;
 import edu.stanford.nlp.trees.Tree;
 import lombok.extern.slf4j.Slf4j;
-import org.frameworks.common.nlp.Helper;
-import org.frameworks.common.nlp.NlpService;
-import org.frameworks.common.nlp.entities.Part;
-import org.frameworks.common.nlp.entities.Tag;
-import org.frameworks.common.nlp.entities.Word;
+import org.ngsandbox.common.nlp.Helper;
+import org.ngsandbox.common.nlp.NlpService;
+import org.ngsandbox.common.nlp.entities.Part;
+import org.ngsandbox.common.nlp.entities.Tag;
+import org.ngsandbox.common.nlp.entities.Word;
 
 import java.util.List;
 

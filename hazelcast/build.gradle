@@ -1,3 +1,4 @@
+apply plugin: 'java'
 apply plugin: 'com.github.johnrengelman.shadow'
 
 sourceCompatibility = 1.8
@@ -7,7 +8,7 @@ shadowJar{
     classifier = null
     version = null
     manifest {
-        attributes('Main-Class': 'org.frameworks.hazelcast.Program')
+        attributes('Main-Class': 'org.ngsandbox.hazelcast.Program')
     }
     dependencies{
     }
@@ -18,5 +19,5 @@ dependencies {
     compile project(':common')
     compile group: 'com.hazelcast', name: 'hazelcast-all', version: project['hazelcast.version']
 
-    testCompile group: 'junit', name: 'junit', version: project['junit.version']
+//    testCompile group: 'junit', name: 'junit', version: project['junit.version']
 }

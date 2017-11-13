@@ -2,8 +2,8 @@ package org.ngsanbox.rest.controllers;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.frameworks.common.nao.entities.ContextInfo;
-import org.frameworks.common.nao.entities.QuestionInfo;
+import org.ngsandbox.common.nao.entities.ContextInfo;
+import org.ngsandbox.common.nao.entities.QuestionInfo;
 import org.ngsanbox.rest.adapters.Base64FileAdapter;
 import org.ngsanbox.rest.adapters.MultipartFileAdapter;
 import org.ngsanbox.rest.services.RequestsService;

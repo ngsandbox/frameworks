@@ -1,4 +1,4 @@
-group 'org.frameworks'
+group 'org.ngsandbox'
 version '00.001.00'
 
 buildscript {
@@ -29,7 +29,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-    compile project(':common')
+//    compile project(':common')
     compile project(':hazelcast')
     compile project(":nlp")
     compile("org.springframework.boot:spring-boot-starter-web")

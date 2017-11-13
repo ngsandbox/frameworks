@@ -1,4 +1,4 @@
-rootProject.name = 'frameworks'
+rootProject.name = 'ngsandbox'
 
 include 'common', 'hazelcast', 'zookeeper', 'nao', 'elastic', 'spring-rest'
 include 'nlp'

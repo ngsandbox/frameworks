@@ -4,7 +4,7 @@ import edu.stanford.nlp.simple.Sentence;
 import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.util.Quadruple;
 import lombok.extern.slf4j.Slf4j;
-import org.frameworks.common.nlp.entities.Part;
+import org.ngsandbox.common.nlp.entities.Part;
 import org.ngsandbox.nlp.NlpServiceImpl;
 
 import java.util.Collection;

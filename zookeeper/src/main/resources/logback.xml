@@ -9,7 +9,7 @@
         </layout>
     </appender>
 
-    <logger name="org.frameworks" level="debug" additivity="false">
+    <logger name="org.ngsandbox" level="debug" additivity="false">
         <appender-ref ref="STDOUT" />
     </logger>
 

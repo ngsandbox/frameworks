@@ -9,7 +9,7 @@
         </layout>
     </appender>
 
-    <logger name="org.frameworks" level="trace" additivity="false">
+    <logger name="org.ngsanbox" level="trace" additivity="false">
         <appender-ref ref="STDOUT" />
     </logger>
 
