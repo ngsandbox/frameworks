@@ -3,7 +3,7 @@ package org.ngsandbox.nlp;
 import edu.stanford.nlp.simple.Sentence;
 import edu.stanford.nlp.trees.Tree;
 import lombok.extern.slf4j.Slf4j;
-import org.ngsandbox.common.nlp.Helper;
+import org.ngsandbox.common.nlp.TagHelper;
 import org.ngsandbox.common.nlp.NlpService;
 import org.ngsandbox.common.nlp.entities.Part;
 import org.ngsandbox.common.nlp.entities.Tag;
@@ -32,6 +32,26 @@ public class NlpServiceImpl implements NlpService {
         return part;
     }
 
+    @Override
+    public Tag findTag(Part part, String tag) {
+        if (part != null && part instanceof Tag) {
+            Tag tg = (Tag) part;
+            if (tg.getTag().equals(tag)) {
+                return tg;
+            }
+
+            for (Part kid : tg.getChildren()) {
+                Tag kidTag = findTag(kid, tag);
+                if (kidTag != null) {
+                    return kidTag;
+                }
+            }
+        }
+
+        return null;
+    }
+
+
     public static Part convert(Tree tree) {
         if (tree == null) {
             return null;
@@ -46,7 +66,7 @@ public class NlpServiceImpl implements NlpService {
                 String tag = tree.label().value();
                 part = Tag.builder()
                         .tag(tag)
-                        .label(Helper.TAGS.get(tag))
+                        .label(TagHelper.TAGS.get(tag))
                         .build();
             }
         }
@@ -72,6 +92,6 @@ public class NlpServiceImpl implements NlpService {
 
     @Override
     public String tagDescription(String tag) {
-        return Helper.TAGS.get(tag);
+        return TagHelper.TAGS.get(tag);
     }
 }
