@@ -1,10 +1,11 @@
 package org.ngsanbox.rest.adapters;
 
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.ngsanbox.rest.exceptions.FileProcessError;
+import org.ngsandbox.common.file.FileAdapter;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.NotNull;
 import java.io.IOException;
 
 @Slf4j
@@ -12,7 +13,7 @@ public class MultipartFileAdapter implements FileAdapter {
 
     private final MultipartFile file;
 
-    public MultipartFileAdapter(@NotNull MultipartFile file) {
+    public MultipartFileAdapter(@NonNull MultipartFile file) {
         this.file = file;
     }
 

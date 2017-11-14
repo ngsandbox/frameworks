@@ -1,0 +1,11 @@
+group 'org.ngsandbox'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+dependencies {
+    compile project(":common")
+    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.3'
+
+}

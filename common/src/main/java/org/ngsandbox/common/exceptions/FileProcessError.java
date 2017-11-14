@@ -1,4 +1,6 @@
-package org.ngsandbox.common.nao.exceptions;
+package org.ngsandbox.common.exceptions;
+
+import org.ngsandbox.common.nao.exceptions.NaoException;
 
 public class FileProcessError extends NaoException {
     public FileProcessError(String message) {

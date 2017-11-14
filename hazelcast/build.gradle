@@ -10,14 +10,10 @@ shadowJar{
     manifest {
         attributes('Main-Class': 'org.ngsandbox.hazelcast.Program')
     }
-    dependencies{
-    }
 }
 
 
 dependencies {
     compile project(':common')
     compile group: 'com.hazelcast', name: 'hazelcast-all', version: project['hazelcast.version']
-
-//    testCompile group: 'junit', name: 'junit', version: project['junit.version']
 }

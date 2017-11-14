@@ -1,6 +1,6 @@
-package org.ngsanbox.rest.adapters;
+package org.ngsandbox.common.file;
 
-import org.ngsanbox.rest.exceptions.FileProcessError;
+import org.ngsandbox.common.exceptions.FileProcessError;
 
 public interface FileAdapter {
     String getFilename();

@@ -26,17 +26,21 @@ subprojects {
     }
 
     dependencies {
+        compile group: 'commons-codec', name: 'commons-codec', version: '1.11'
+        compile group: 'commons-io', name: 'commons-io', version: '2.6'
 
-        compile files('./libs/java-naoqi-sdk-2.1.4.13-linux32.jar')
+        compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
 
+
+        compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: project['jackson.version']
         compile (group: 'org.slf4j', name: 'slf4j-api', version: project['slf4j.version'])
         compile (group: 'org.slf4j', name: 'jul-to-slf4j', version: project['slf4j.version'])
-        //compile (group: 'org.slf4j', name: 'jcl-over-slf4j', version: project['slf4j.version'])
         compile (group: 'ch.qos.logback', name: 'logback-classic', version: project['logback.version'])
         compile (group: 'ch.qos.logback', name: 'logback-core', version: project['logback.version'])
 
         compileOnly group: 'org.projectlombok', name: 'lombok', version: project['lombok.version']
 
+        testCompile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version:  project['jackson.version']
         testCompile "org.junit.jupiter:junit-jupiter-api:5.0.0-M4"
         testCompile "org.junit.jupiter:junit-jupiter-engine:5.0.0-M4"
         testCompile "org.junit.platform:junit-platform-launcher:1.0.0-M4"
