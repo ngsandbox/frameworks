@@ -1,4 +1,4 @@
-package org.ngsandbox.common.face;
+package org.ngsandbox.common.face.dto;
 
 import lombok.Builder;
 import lombok.Data;
@@ -11,5 +11,5 @@ public class RegRequest implements Serializable {
     private String login;
     private String fotoName;
     private String desc;
-    private byte[] imageStr;
+    private String imageStr;
 }

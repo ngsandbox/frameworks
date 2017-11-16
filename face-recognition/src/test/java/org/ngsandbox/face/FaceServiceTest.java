@@ -1,32 +1,56 @@
 package org.ngsandbox.face;
 
-import org.apache.commons.io.IOUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.ngsandbox.common.face.RegRequest;
-import org.ngsandbox.common.face.RegResponse;
+import org.ngsandbox.common.face.ResponseStatus;
+import org.ngsandbox.common.face.ResponseWrapper;
+import org.ngsandbox.common.face.dto.AuthResponse;
+import org.ngsandbox.common.face.dto.FindResponse;
+import org.ngsandbox.common.face.dto.RegResponse;
 import org.ngsandbox.common.file.Base64FileAdapter;
 
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
-public class FaceServiceTest {
+@Slf4j
+class FaceServiceTest {
+    private static final String HOST_NAME = "http://93.88.76.57:8090";
 
     @Test
-    public void testPostRequest() throws Exception {
-        String hostname = "http://93.88.76.57:8090";
-        String uri = "/regist";
+    void testRegisterRequest() throws Exception {
         String fileName = "face.jpg";
         try (InputStream inputStream = FaceServiceTest.class.getResourceAsStream("/" + fileName)) {
-            FaceServiceImpl<RegRequest, RegResponse> serv = new FaceServiceImpl<>(RegRequest.class, RegResponse.class);
-            RegRequest req = RegRequest.builder()
-                    .fotoName(fileName)
-                    .desc("test photo")
-                    .imageStr(new Base64FileAdapter(fileName, IOUtils.toString(inputStream, StandardCharsets.UTF_8)).getContent())
-                    .login("vma-test")
-                    .build();
-            RegResponse regResponse = serv.postContent(hostname, uri, req);
+            RemoteFaceServiceImpl serv = new RemoteFaceServiceImpl(HOST_NAME);
+            ResponseWrapper<RegResponse> regResponse = serv.register(UUID.randomUUID().toString(), new Base64FileAdapter(fileName, inputStream));
+            Assertions.assertNotNull(regResponse.getResponse());
+            Assertions.assertEquals(regResponse.getStatus(), ResponseStatus.OK);
+            Assertions.assertEquals(regResponse.getResponse().getStatus(), "SUCCESS");
+        }
+    }
+
+    @Test
+    void testAuthRequest() throws Exception {
+        String fileName = "face.jpg";
+        try (InputStream inputStream = FaceServiceTest.class.getResourceAsStream("/" + fileName)) {
+            RemoteFaceServiceImpl serv = new RemoteFaceServiceImpl(HOST_NAME);
+            ResponseWrapper<AuthResponse> regResponse = serv.auth(UUID.randomUUID().toString(), new Base64FileAdapter(fileName, inputStream));
             Assertions.assertNotNull(regResponse);
+            Assertions.assertNotNull(regResponse.getResponse());
+            Assertions.assertEquals(regResponse.getStatus(), ResponseStatus.OK);
+            Assertions.assertEquals(regResponse.getResponse().getStatus(), "ERROR");
+        }
+    }
+
+    @Test
+    void testFindRequest() throws Exception {
+        String fileName = "face.jpg";
+        try (InputStream inputStream = FaceServiceTest.class.getResourceAsStream("/" + fileName)) {
+            RemoteFaceServiceImpl serv = new RemoteFaceServiceImpl(HOST_NAME);
+            ResponseWrapper<FindResponse> regResponse = serv.find(new Base64FileAdapter(fileName, inputStream));
+            Assertions.assertNotNull(regResponse.getResponse());
+            Assertions.assertEquals(regResponse.getStatus(), ResponseStatus.OK);
+            Assertions.assertEquals(regResponse.getResponse().getStatus(), "SUCCESS");
         }
     }
 }

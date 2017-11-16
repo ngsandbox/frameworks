@@ -2,6 +2,7 @@ package org.ngsandbox.common.nao.entities;
 
 public enum ContextStatus {
     Initialized,
-    ImageProcessing,
+    FaceNotFound,
+    FaceRecognized,
     Answer2Question
 }

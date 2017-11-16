@@ -7,42 +7,38 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.EntityUtils;
 import org.ngsandbox.common.exceptions.HttpError;
 
 import java.util.Arrays;
 
 
 @Slf4j
-public class FaceServiceImpl<R, B> {
+class RemoteFaceService<B> {
 
     private final ObjectMapper mapper = new ObjectMapper();
-    private final Class<R> reqClazz;
     private final Class<B> bodyClazz;
+    private final String hostUrl;
 
-    public FaceServiceImpl(@NonNull Class<R> reqClazz, @NonNull Class<B> resClazz) {
-        this.reqClazz = reqClazz;
+    RemoteFaceService(@NonNull String hostUrl, @NonNull Class<B> resClazz) {
         this.bodyClazz = resClazz;
+        this.hostUrl = hostUrl;
     }
 
-    public B postContent(String hostUrl, String uri, R reqBody) {
+    B post(String uri, Object content) throws HttpError {
         try (CloseableHttpClient httpclient = HttpClientBuilder.create().build()) {
             HttpHost target = HttpHost.create(hostUrl);
 
             HttpPost postRequest = new HttpPost(uri);
-            /*
-            "Content-Type", "application/json"
-"Accept-Encoding", "gzip, deflate"
-"Accept", "application/json"
-"Connection", "Keep-Alive"
-
-            */
             postRequest.addHeader("Content-Type", "application/json");
             postRequest.addHeader("Accept", "application/json");
-            postRequest.setEntity(new ByteArrayEntity(mapper.writeValueAsBytes(reqBody)));
+            postRequest.addHeader("Accept-Encoding", "gzip, deflate");
+            postRequest.addHeader("Connection", "Keep-Alive");
+            String json = mapper.writeValueAsString(content);
+            postRequest.setEntity(new StringEntity(json, ContentType.APPLICATION_JSON));
 
             HttpResponse httpResponse = httpclient.execute(target, postRequest);
             HttpEntity entity = httpResponse.getEntity();

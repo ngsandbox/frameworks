@@ -6,4 +6,6 @@ public interface FileAdapter {
     String getFilename();
 
     byte[] getContent() throws FileProcessError;
+
+    String getBase64() throws FileProcessError;
 }

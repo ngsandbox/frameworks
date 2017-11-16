@@ -4,6 +4,7 @@ package org.ngsanbox.rest.controllers;
 import lombok.extern.slf4j.Slf4j;
 import org.ngsandbox.common.file.Base64FileAdapter;
 import org.ngsandbox.common.nao.entities.ContextInfo;
+import org.ngsandbox.common.nao.entities.FaceInfo;
 import org.ngsandbox.common.nao.entities.QuestionInfo;
 import org.ngsanbox.rest.adapters.MultipartFileAdapter;
 import org.ngsanbox.rest.services.RequestsService;
@@ -46,17 +47,17 @@ public class RequestController {
     }
 
     @PostMapping("/requests/file")
-    public ContextInfo handleFileUpload(@RequestParam(required = false) String id, @RequestParam("file") MultipartFile file) {
+    public FaceInfo handleFileUpload(@RequestParam(required = false) String id, @RequestParam("file") MultipartFile file) {
         log.trace("Save file content for id {}", id);
-        return requestsService.saveFile(id, new MultipartFileAdapter(file));
+        return requestsService.findFace(id, new MultipartFileAdapter(file));
     }
 
     @PostMapping("/requests/base64")
-    public ContextInfo handleBase64Upload(@RequestParam(required = false) String id,
-                                          @RequestParam("fileName") String fileName,
-                                          @RequestParam("fileContent") String fileContent) {
+    public FaceInfo handleBase64Upload(@RequestParam(required = false) String id,
+                                       @RequestParam("fileName") String fileName,
+                                       @RequestParam("fileContent") String fileContent) {
         log.trace("Save base64 file content of fileName {} for request info id {}", fileName, id);
-        return requestsService.saveFile(id, new Base64FileAdapter(fileName, fileContent));
+        return requestsService.findFace(id, new Base64FileAdapter(fileName, fileContent));
     }
 
     @PostMapping("/requests/ask")
