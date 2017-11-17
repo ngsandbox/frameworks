@@ -8,3 +8,12 @@ dependencies {
     compile project(":common")
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.3'
 }
+
+
+task downloadTest {
+    def f = new File('./speechkit/src/test/resources/speech.wav')
+    if (!f.exists()) {
+        new URL('https://download.cdn.yandex.net/tech/ru/speechkit/cloud/doc/guide/files/speech.wav')
+                .withInputStream{ i -> f.withOutputStream{ it << i }}
+    }
+}
