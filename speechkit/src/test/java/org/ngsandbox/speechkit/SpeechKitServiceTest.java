@@ -5,13 +5,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.w3c.dom.Document;
+import org.ngsandbox.common.speech.RecognitionResult;
+import org.ngsandbox.common.speech.Variant;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -46,11 +42,20 @@ class SpeechKitServiceTest {
 
     @Test
     void testSKResponse() throws Exception {
-        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-        Document doc = dBuilder.parse((File) null);
-
+        try (InputStream resp = SpeechKitServiceTest.class.getResourceAsStream("/yaSpeechKitResponse.xml")) {
+            ResponseConverter responseConverter = new ResponseConverter(resp);
+            RecognitionResult recognitionResult = responseConverter.getRecognitionResult();
+            log.debug("Result recognition {}", recognitionResult);
+            Assertions.assertNotNull(recognitionResult);
+            Assertions.assertEquals(recognitionResult.getSuccess(), 1);
+            Assertions.assertFalse(recognitionResult.getVariants().isEmpty());
+            Variant variant = recognitionResult.getVariants().get(0);
+            Assertions.assertEquals(variant.getConfidence(), 1, 0.001);
+            Assertions.assertEquals(variant.getValue(), "твой номер 212-85-06");
+        }
     }
+
+
 
     @AfterEach
     void close() throws IOException {
