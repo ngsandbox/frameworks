@@ -8,5 +8,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class ResponseWrapper<R> {
     private R response;
+    private String msg;
     private ResponseStatus status;
 }

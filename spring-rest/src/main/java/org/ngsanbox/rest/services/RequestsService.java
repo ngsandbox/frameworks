@@ -3,16 +3,17 @@ package org.ngsanbox.rest.services;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.ngsanbox.rest.exceptions.FileProcessError;
+import org.ngsanbox.rest.exceptions.RequestNotFound;
 import org.ngsandbox.common.face.FaceService;
-import org.ngsandbox.common.face.ResponseStatus;
 import org.ngsandbox.common.face.ResponseWrapper;
+import org.ngsandbox.common.face.dto.AuthResponse;
 import org.ngsandbox.common.face.dto.FindResponse;
+import org.ngsandbox.common.face.dto.RegResponse;
 import org.ngsandbox.common.file.FileAdapter;
 import org.ngsandbox.common.nao.ContextDao;
 import org.ngsandbox.common.nao.entities.*;
 import org.ngsandbox.common.nlp.NlpService;
-import org.ngsanbox.rest.exceptions.FileProcessError;
-import org.ngsanbox.rest.exceptions.RequestNotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -52,21 +53,46 @@ public class RequestsService {
     public FaceInfo findFace(String contId, @NotNull FileAdapter fileAdapter) {
         log.debug("Saving file content {} for request id {}", contId, fileAdapter.getFilename());
         ContextInfo contextInfo = contextDao.handleContext(contId);
-        FileInfo fileInfo = FileInfo.builder()
-                .reqId(contextInfo.getId())
-                .fileName(fileAdapter.getFilename())
-                .fileBody(fileAdapter.getContent()).build();
+        FileInfo fileInfo = new FileInfo(contextInfo.getId(), fileAdapter.getFilename(), fileAdapter.getContent());
         contextDao.saveFile(fileInfo);
-        ResponseWrapper<FindResponse> wrapper = findFaceService.find(fileAdapter);
-        contextInfo.setStatus(wrapper.getStatus() == ResponseStatus.OK ?
-                ContextStatus.FaceRecognized : ContextStatus.FaceNotFound);
+        ResponseWrapper<FindResponse> findResp = findFaceService.find(fileAdapter);
+        String msg = "";
+        String login = findResp.getResponse() != null ? findResp.getResponse().getLogin() : null;
+        if (findResp.getStatus().isSuccess()) {
+            ResponseWrapper<AuthResponse> authResp = findFaceService.auth(login, fileAdapter);
+            if (authResp.getStatus().isSuccess()) {
+                contextInfo.setStatus(ContextStatus.FaceRecognized);
+            } else {
+                msg = authResp.getResponse() != null ? authResp.getResponse().getErrorDescription() : null;
+                contextInfo.setStatus(ContextStatus.FaceAuthFailed);
+            }
+        } else {
+            msg = findResp.getResponse() != null ? findResp.getResponse().getErrorDescription() : null;
+            contextInfo.setStatus(ContextStatus.FaceNotFound);
+        }
 
-        String login = wrapper.getResponse() != null ? wrapper.getResponse().getLogin() : null;
-        FaceInfo faceInfo = new FaceInfo(contextInfo, login);
+        FaceInfo faceInfo = new FaceInfo(contextInfo, login, msg);
         log.debug("Face recognition status {} ", faceInfo);
         contextDao.saveContext(contextInfo);
         return faceInfo;
     }
+
+    public FaceInfo faceAuth(String contId, @NonNull String login, @NonNull FileAdapter fileAdapter) {
+        log.debug("Saving file content {} for request id {}", contId, fileAdapter.getFilename());
+        ContextInfo contextInfo = contextDao.handleContext(contId);
+        FileInfo fileInfo = new FileInfo(contextInfo.getId(), fileAdapter.getFilename(), fileAdapter.getContent());
+        contextDao.saveFile(fileInfo);
+        ResponseWrapper<RegResponse> wrapper = findFaceService.register(login, fileAdapter);
+        contextInfo.setStatus(wrapper.getStatus().isSuccess() ?
+                ContextStatus.FaceRegistered : ContextStatus.FaceRegError);
+
+        String msg = wrapper.getResponse() != null ? wrapper.getResponse().getErrorDescription() : null;
+        FaceInfo faceInfo = new FaceInfo(contextInfo, login, msg);
+        log.debug("Face recognition status {} ", faceInfo);
+        contextDao.saveContext(contextInfo);
+        return faceInfo;
+    }
+
 
     private InputStream getFileStream(String reqId) {
         log.debug("Try to get file stream by id {}", reqId);

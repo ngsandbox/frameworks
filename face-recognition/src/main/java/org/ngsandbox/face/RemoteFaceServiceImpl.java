@@ -30,9 +30,12 @@ public class RemoteFaceServiceImpl implements FaceService {
                     .build();
             RegResponse regResponse = serv.post("/regist", req);
             log.debug("Register response {}", regResponse);
-            return new ResponseWrapper<>(regResponse, ResponseStatus.OK);
+            ResponseStatus status = regResponse != null && regResponse.getStatus().equalsIgnoreCase("success") ?
+                    ResponseStatus.OK :
+                    ResponseStatus.RESPONSE_ERROR;
+            return new ResponseWrapper<>(regResponse, "", status);
         } catch (HttpError ex) {
-            return new ResponseWrapper<>(null, ResponseStatus.ERROR);
+            return new ResponseWrapper<>(null, ex.getMessage(), ResponseStatus.SERVER_ERROR);
         }
     }
 
@@ -46,9 +49,12 @@ public class RemoteFaceServiceImpl implements FaceService {
                     .build();
             AuthResponse authResp = serv.post("/auth", req);
             log.debug("Auth response {}", authResp);
-            return new ResponseWrapper<>(authResp, ResponseStatus.OK);
+            ResponseStatus status = authResp != null && authResp.getStatus().equalsIgnoreCase("success") ?
+                    ResponseStatus.OK :
+                    ResponseStatus.RESPONSE_ERROR;
+            return new ResponseWrapper<>(authResp, "", status);
         } catch (HttpError ex) {
-            return new ResponseWrapper<>(null, ResponseStatus.ERROR);
+            return new ResponseWrapper<>(null, ex.getMessage(), ResponseStatus.SERVER_ERROR);
         }
     }
 
@@ -61,9 +67,12 @@ public class RemoteFaceServiceImpl implements FaceService {
                     .build();
             FindResponse findResp = serv.post("/find", req);
             log.debug("Find response {}", findResp);
-            return new ResponseWrapper<>(findResp, ResponseStatus.OK);
+            ResponseStatus status = findResp != null && findResp.getStatus().equalsIgnoreCase("success") ?
+                    ResponseStatus.OK :
+                    ResponseStatus.RESPONSE_ERROR;
+            return new ResponseWrapper<>(findResp, "", status);
         } catch (HttpError ex) {
-            return new ResponseWrapper<>(null, ResponseStatus.ERROR);
+            return new ResponseWrapper<>(null, ex.getMessage(), ResponseStatus.SERVER_ERROR);
         }
     }
 

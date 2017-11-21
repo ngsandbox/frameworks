@@ -3,6 +3,7 @@ package org.ngsandbox.face;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
@@ -13,6 +14,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.ngsandbox.common.exceptions.HttpError;
 
+import java.io.InputStream;
 import java.util.Arrays;
 
 
@@ -42,10 +44,18 @@ class RemoteFaceService<B> {
 
             HttpResponse httpResponse = httpclient.execute(target, postRequest);
             HttpEntity entity = httpResponse.getEntity();
-
-
             log.debug("Response status {} ", httpResponse.getStatusLine());
             Arrays.stream(httpResponse.getAllHeaders()).forEach(header -> log.debug("Response header {} ", header));
+
+            if (httpResponse.getStatusLine().getStatusCode() != 200) {
+                String err = httpResponse.getStatusLine().toString();
+                if (entity != null) {
+                    try (InputStream in = entity.getContent()) {
+                        err += IOUtils.toString(in, "UTF-8");
+                    }
+                }
+                throw new HttpError(hostUrl, uri, err);
+            }
 
             //log.debug("Response entity {} ", entity != null ? EntityUtils.toString(entity) : "");
             return entity != null ? mapper.readValue(entity.getContent(), bodyClazz) : null;

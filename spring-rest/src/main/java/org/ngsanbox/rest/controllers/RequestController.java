@@ -46,18 +46,27 @@ public class RequestController {
         requestsService.outputImageStream(id, response);
     }
 
-    @PostMapping("/requests/file")
-    public FaceInfo handleFileUpload(@RequestParam(required = false) String id, @RequestParam("file") MultipartFile file) {
+    @PostMapping("/requests/find/face/file")
+    public FaceInfo faceFileUpload(@RequestParam(required = false) String id, @RequestParam("file") MultipartFile file) {
         log.trace("Save file content for id {}", id);
         return requestsService.findFace(id, new MultipartFileAdapter(file));
     }
 
-    @PostMapping("/requests/base64")
-    public FaceInfo handleBase64Upload(@RequestParam(required = false) String id,
-                                       @RequestParam("fileName") String fileName,
-                                       @RequestParam("fileContent") String fileContent) {
+    @PostMapping("/requests/find/face/base64")
+    public FaceInfo faceBase64Find(@RequestParam(required = false) String id,
+                                   @RequestParam("fileName") String fileName,
+                                   @RequestParam("fileContent") String fileContent) {
         log.trace("Save base64 file content of fileName {} for request info id {}", fileName, id);
         return requestsService.findFace(id, new Base64FileAdapter(fileName, fileContent));
+    }
+
+    @PostMapping("/requests/auth/face/base64")
+    public FaceInfo faceBase64Auth(@RequestParam(required = false) String id,
+                                   @RequestParam() String login,
+                                   @RequestParam("fileName") String fileName,
+                                   @RequestParam("fileContent") String fileContent) {
+        log.trace("Save base64 file content of fileName {} for request info id {}", fileName, id);
+        return requestsService.faceAuth(id, login, new Base64FileAdapter(fileName, fileContent));
     }
 
     @PostMapping("/requests/ask")

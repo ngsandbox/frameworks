@@ -16,12 +16,15 @@ public class FaceInfo implements Serializable {
 
     private final String login;
 
+    private final String msg;
+
 
     @Override
     public String toString() {
         return "FaceInfo{" +
                 "contextInfo=" + contextInfo +
                 ", login='" + login + '\'' +
+                ", msg='" + msg + '\'' +
                 '}';
     }
 }
