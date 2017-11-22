@@ -5,11 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.ngsanbox.rest.exceptions.FileProcessError;
 import org.ngsanbox.rest.exceptions.RequestNotFound;
+import org.ngsandbox.common.face.BaseResponse;
 import org.ngsandbox.common.face.FaceService;
 import org.ngsandbox.common.face.ResponseWrapper;
-import org.ngsandbox.common.face.dto.AuthResponse;
-import org.ngsandbox.common.face.dto.FindResponse;
-import org.ngsandbox.common.face.dto.RegResponse;
 import org.ngsandbox.common.file.FileAdapter;
 import org.ngsandbox.common.nao.ContextDao;
 import org.ngsandbox.common.nao.entities.*;
@@ -55,19 +53,19 @@ public class RequestsService {
         ContextInfo contextInfo = contextDao.handleContext(contId);
         FileInfo fileInfo = new FileInfo(contextInfo.getId(), fileAdapter.getFilename(), fileAdapter.getContent());
         contextDao.saveFile(fileInfo);
-        ResponseWrapper<FindResponse> findResp = findFaceService.find(fileAdapter);
+        ResponseWrapper<BaseResponse> findResp = findFaceService.find(fileAdapter);
         String msg = "";
         String login = findResp.getResponse() != null ? findResp.getResponse().getLogin() : null;
         if (findResp.getStatus().isSuccess()) {
-            ResponseWrapper<AuthResponse> authResp = findFaceService.auth(login, fileAdapter);
+            ResponseWrapper<BaseResponse> authResp = findFaceService.auth(login, fileAdapter);
             if (authResp.getStatus().isSuccess()) {
                 contextInfo.setStatus(ContextStatus.FaceRecognized);
             } else {
-                msg = authResp.getResponse() != null ? authResp.getResponse().getErrorDescription() : null;
+                msg = authResp.getMsg();
                 contextInfo.setStatus(ContextStatus.FaceAuthFailed);
             }
         } else {
-            msg = findResp.getResponse() != null ? findResp.getResponse().getErrorDescription() : null;
+            msg = findResp.getMsg();
             contextInfo.setStatus(ContextStatus.FaceNotFound);
         }
 
@@ -82,11 +80,11 @@ public class RequestsService {
         ContextInfo contextInfo = contextDao.handleContext(contId);
         FileInfo fileInfo = new FileInfo(contextInfo.getId(), fileAdapter.getFilename(), fileAdapter.getContent());
         contextDao.saveFile(fileInfo);
-        ResponseWrapper<RegResponse> wrapper = findFaceService.register(login, fileAdapter);
+        ResponseWrapper<BaseResponse> wrapper = findFaceService.register(login, fileAdapter);
         contextInfo.setStatus(wrapper.getStatus().isSuccess() ?
                 ContextStatus.FaceRegistered : ContextStatus.FaceRegError);
 
-        String msg = wrapper.getResponse() != null ? wrapper.getResponse().getErrorDescription() : null;
+        String msg = wrapper.getMsg();
         FaceInfo faceInfo = new FaceInfo(contextInfo, login, msg);
         log.debug("Face recognition status {} ", faceInfo);
         contextDao.saveContext(contextInfo);

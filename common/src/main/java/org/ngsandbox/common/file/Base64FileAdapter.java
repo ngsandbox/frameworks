@@ -6,10 +6,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.ngsandbox.common.exceptions.FileProcessError;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 
 @Slf4j
 public class Base64FileAdapter implements FileAdapter {
@@ -41,5 +38,15 @@ public class Base64FileAdapter implements FileAdapter {
     @Override
     public String getBase64() throws FileProcessError {
         return fileContent;
+    }
+
+    @Override
+    public InputStream getStream() throws FileProcessError {
+        try {
+            return IOUtils.toInputStream(fileContent,"UTF-8");
+        } catch (IOException e) {
+            log.error("Error to get input stream of base64 file {}", getFilename(), e);
+            throw new FileProcessError("Error to get input stream of base64 file " + getFilename(), e);
+        }
     }
 }

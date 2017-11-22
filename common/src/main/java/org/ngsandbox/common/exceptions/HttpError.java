@@ -3,7 +3,7 @@ package org.ngsandbox.common.exceptions;
 import lombok.Getter;
 
 @Getter
-public class HttpError extends RuntimeException {
+public class HttpError extends NgError {
 
     private final String url;
     private final String uri;

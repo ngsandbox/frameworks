@@ -54,6 +54,8 @@ class RemoteFaceService<B> {
                         err += IOUtils.toString(in, "UTF-8");
                     }
                 }
+
+                log.error("Error response received from server {} uri {} msg {}", hostUrl, uri, err);
                 throw new HttpError(hostUrl, uri, err);
             }
 

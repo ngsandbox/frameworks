@@ -1,4 +1,4 @@
-package org.ngsandbox.common.face.dto;
+package org.ngsandbox.face.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;

@@ -1,33 +1,34 @@
-package org.ngsanbox.rest.adapters;
+package org.ngsandbox.common.file;
 
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
-import org.ngsanbox.rest.exceptions.FileProcessError;
-import org.ngsandbox.common.file.FileAdapter;
-import org.springframework.web.multipart.MultipartFile;
+import org.apache.commons.io.IOUtils;
+import org.ngsandbox.common.exceptions.FileProcessError;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 @Slf4j
-public class MultipartFileAdapter implements FileAdapter {
+public class StreamFileAdapter implements FileAdapter {
 
-    private final MultipartFile file;
+    private final InputStream stream;
+    private final String fileName;
 
-    public MultipartFileAdapter(@NonNull MultipartFile file) {
-        this.file = file;
+    public StreamFileAdapter(@NonNull InputStream stream, @NonNull String fileName) {
+        this.stream = stream;
+        this.fileName = fileName;
     }
 
     @Override
     public String getFilename() {
-        return file.getOriginalFilename();
+        return fileName;
     }
 
     @Override
     public byte[] getContent() throws FileProcessError {
         try {
-            return file.getBytes();
+            return IOUtils.toByteArray(stream);
         } catch (IOException e) {
             log.error("Error to get bytes content of file {}", getFilename(), e);
             throw new FileProcessError("Error to parse content of file " + getFilename(), e);
@@ -41,11 +42,6 @@ public class MultipartFileAdapter implements FileAdapter {
 
     @Override
     public InputStream getStream() throws FileProcessError {
-        try {
-            return file.getInputStream();
-        } catch (IOException e) {
-            log.error("Error to get input stream of file {}", getFilename(), e);
-            throw new FileProcessError("Error to get input stream of file " + getFilename(), e);
-        }
+        return stream;
     }
 }

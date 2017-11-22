@@ -1,6 +1,8 @@
 package org.ngsandbox.common.nao.exceptions;
 
-public class RequestNotFound extends NaoException {
+import org.ngsandbox.common.exceptions.NgError;
+
+public class RequestNotFound extends NgError {
     public RequestNotFound(String message) {
         super(message);
     }

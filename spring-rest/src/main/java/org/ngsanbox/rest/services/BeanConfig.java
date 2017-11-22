@@ -1,7 +1,6 @@
 package org.ngsanbox.rest.services;
 
 import org.ngsandbox.common.face.FaceService;
-import org.ngsandbox.common.face.dto.FindResponse;
 import org.ngsandbox.common.nao.ContextDao;
 import org.ngsandbox.common.nlp.NlpService;
 import org.ngsandbox.face.RemoteFaceServiceImpl;
