@@ -21,26 +21,25 @@ import java.util.Properties;
 import java.util.UUID;
 
 
+/**
+ * Example of service call:
+ * POST /asr_xml?uuid=<UserIdentifier>&key=<ApiKey>&topic=queries HTTP/1.1
+ * Host: asr.yandex.net
+ * Content-Type: audio/x-wav
+ */
 @Slf4j
 class SpeechKitService {
 
     private final String apiKey;
     private final String hostUrl;
 
-    /*
-    POST /asr_xml?uuid=<идентификатор пользователя>&key=<API-ключ>&topic=queries HTTP/1.1
-Host: asr.yandex.net
-Content-Type: audio/x-wav
-    * */
-
-    SpeechKitService(@NonNull Properties props) {
-        String host = props.getProperty("host");
-        hostUrl = host == null ? "https://asr.yandex.net" : host;
-        this.apiKey = props.getProperty("apiKey");
-        Objects.requireNonNull(this.apiKey, "Api key for SpeechKit is not specified");
+    SpeechKitService(@NonNull String hostUrl, @NonNull String apiKey) {
+        log.info("SpeechKit service initialization for host {} and api {}", hostUrl, apiKey);
+        this.hostUrl = hostUrl;
+        this.apiKey = apiKey;
     }
 
-    String post(@NonNull InputStream file) throws HttpError {
+    InputStream post(@NonNull InputStream file) throws HttpError {
         String id = UUID.randomUUID().toString().replaceAll("-", "");
         String uri = "/asr_xml?uuid=" + id + "&key=" + apiKey + "&topic=queries";
         try (CloseableHttpClient httpclient = HttpClientBuilder.create().build()) {
@@ -56,17 +55,7 @@ Content-Type: audio/x-wav
 
             log.debug("Response status {} ", httpResponse.getStatusLine());
             Arrays.stream(httpResponse.getAllHeaders()).forEach(header -> log.debug("Response header {} ", header));
-            String body = null;
-            if (entity != null) {
-                try (InputStreamReader inputStreamReader = new InputStreamReader(entity.getContent())) {
-                    body = IOUtils.toString(inputStreamReader);
-                    log.trace("Receiver content {}", body);
-                }
-            } else {
-                log.error("Nothing has been received from uri {}", uri);
-            }
-
-            return body;
+            return entity.getContent();
         } catch (Exception e) {
             log.error("Error to call host {} uri {} ", hostUrl, uri, e);
             throw new HttpError(hostUrl, uri, "Errror to call server", e);

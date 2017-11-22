@@ -1,4 +1,4 @@
-package org.ngsandbox.common.speech;
+package org.ngsandbox.speechkit.dto;
 
 import lombok.Builder;
 import lombok.Data;

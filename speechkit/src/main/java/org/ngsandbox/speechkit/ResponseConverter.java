@@ -3,8 +3,8 @@ package org.ngsandbox.speechkit;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.ngsandbox.common.exceptions.FileProcessError;
-import org.ngsandbox.common.speech.RecognitionResult;
-import org.ngsandbox.common.speech.Variant;
+import org.ngsandbox.speechkit.dto.RecognitionResult;
+import org.ngsandbox.speechkit.dto.Variant;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -13,15 +13,15 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.InputStream;
 
 @Slf4j
-public class ResponseConverter {
+class ResponseConverter {
 
     private final InputStream stream;
 
-    public ResponseConverter(@NonNull InputStream stream) {
+    ResponseConverter(@NonNull InputStream stream) {
         this.stream = stream;
     }
 
-    public RecognitionResult getRecognitionResult() {
+    RecognitionResult getRecognitionResult() {
         try {
             RecognitionResult.RecognitionResultBuilder builder = RecognitionResult.builder();
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
