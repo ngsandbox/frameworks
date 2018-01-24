@@ -1,0 +1,46 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+configurations {
+    lombok
+    compileOnly
+}
+
+def unpackedAndRenamedLombokDir = file("$buildDir/lombok")
+
+task unpackAndRenameLombok {
+    inputs.files configurations.lombok
+    outputs.dir unpackedAndRenamedLombokDir
+    doFirst {
+        mkdir unpackedAndRenamedLombokDir
+        delete unpackedAndRenamedLombokDir.listFiles()
+    }
+    doLast {
+        copy {
+            from zipTree(configurations.lombok.singleFile)
+            into unpackedAndRenamedLombokDir
+            rename "(.*)[.]SCL[.]lombok", '$1.class'
+        }
+    }
+}
+
+sourceSets {
+    main {
+        compileClasspath += configurations.compileOnly
+        output.dir(unpackedAndRenamedLombokDir, builtBy: unpackAndRenameLombok)
+    }
+}
+
+tasks.compileJava {
+    dependsOn unpackAndRenameLombok
+}
+
+dependencies {
+    compile files("${System.properties['java.home']}/../lib/tools.jar")
+    compile group: 'javax.inject', name: 'javax.inject', version: '1'
+    lombok 'org.projectlombok:lombok:1.16.18'
+    compileOnly files(unpackedAndRenamedLombokDir)
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
