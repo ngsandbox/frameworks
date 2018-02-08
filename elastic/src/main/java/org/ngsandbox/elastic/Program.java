@@ -1,12 +1,13 @@
 package org.ngsandbox.elastic;
 
+import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.ActionListener;
 import org.elasticsearch.action.DocWriteRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.support.WriteRequest;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.common.transport.TransportAddress;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
@@ -19,6 +20,7 @@ import java.net.InetAddress;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class Program {
 
     private static final Random random = new Random();
@@ -43,7 +45,7 @@ public class Program {
     public static void main(String... args) throws Exception {
 
         try (TransportClient client = new PreBuiltTransportClient(Settings.EMPTY)
-                .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName("localhost"), 9300))) {
+                .addTransportAddress(new TransportAddress(InetAddress.getByName("localhost"), 9300))) {
             long ticks = 0;
             while (ticks < 1000) {
                 Map<String, BigDecimal> updatedPrices = new HashMap<>();
@@ -106,16 +108,16 @@ public class Program {
                 .setSource(str, XContentType.JSON)
                 .setOpType(DocWriteRequest.OpType.INDEX)
                 .setRefreshPolicy(WriteRequest.RefreshPolicy.WAIT_UNTIL)
-                .setTimeout(TimeValue.timeValueMillis(100))
+                //.setTimeout(TimeValue.timeValueMillis(100))
                 .execute(new ActionListener<IndexResponse>() {
                     @Override
                     public void onResponse(IndexResponse response) {
-                        System.out.println("Index " + indexName + " result: " + response.getResult() + " data: " + str);
+                        log.debug("Index {} result: {} data: {}", indexName, response.getResult(), str);
                     }
 
                     @Override
                     public void onFailure(Exception ex) {
-                        System.out.println("The document for index " + indexName + " has been not been indexed " + ex);
+                        log.error("The document for index {} has been not been indexed", indexName, ex);
                     }
                 });
     }

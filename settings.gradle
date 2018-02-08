@@ -5,4 +5,5 @@ include 'nlp'
 include 'face-recognition'
 include 'speechkit'
 include 'lombok'
+include 'reuters'
 
