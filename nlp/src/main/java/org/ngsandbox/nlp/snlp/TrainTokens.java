@@ -29,9 +29,7 @@ public class TrainTokens implements Closeable {
 
     public void run() throws Exception {
         PTBTokenizer tokenizer = PTBTokenizer.newPTBTokenizer(new InputStreamReader(isTrainingSet));
-        List tokenize = tokenizer.tokenize();
-
-        tokenize.forEach(t -> log.debug("Token {}", t));
+        tokenizer.tokenize().forEach(t -> log.debug("Token {}", t));
 
         Properties props = new Properties();
         props.load(isCrfProps);

@@ -48,21 +48,7 @@ public class Program {
             while (ticks < 1000) {
                 Map<String, BigDecimal> updatedPrices = new HashMap<>();
                 long finalTicks = ticks;
-                data.forEach((symbol, price) -> {
-                    Quote baseQuote = createQuote(symbol, price.doubleValue());
-                    publishEntity(client, "base-quote", baseQuote);
-                    List<Quote> calcQuotes = createCalcQuotes(baseQuote);
-                    if (calcQuotes != null) {
-                        calcQuotes.forEach(calcQuote -> {
-                            publishEntity(client, "calc-quote", calcQuote);
-                            if (finalTicks % 15 == 0) {
-                                publishEntity(client, "publish-quote", calcQuote);
-                            }
-                        });
-                    }
-                    updatedPrices.put(symbol, baseQuote.getPrices().stream()
-                            .filter(p -> p.getVolume() == 0).map(p -> BigDecimal.valueOf(p.getBid())).findFirst().get());
-                });
+                data.forEach((symbol, price) -> publishQuotes(client, updatedPrices, finalTicks, symbol, price));
                 data.clear();
                 data.putAll(updatedPrices);
 
@@ -70,6 +56,22 @@ public class Program {
                 Thread.sleep(2000);
             }
         }
+    }
+
+    private static void publishQuotes(TransportClient client, Map<String, BigDecimal> updatedPrices, long finalTicks, String symbol, BigDecimal price) {
+        Quote baseQuote = createQuote(symbol, price.doubleValue());
+        publishEntity(client, "base-quote", baseQuote);
+        List<Quote> calcQuotes = createCalcQuotes(baseQuote);
+        if (calcQuotes != null) {
+            calcQuotes.forEach(calcQuote -> {
+                publishEntity(client, "calc-quote", calcQuote);
+                if (finalTicks % 15 == 0) {
+                    publishEntity(client, "publish-quote", calcQuote);
+                }
+            });
+        }
+        updatedPrices.put(symbol, baseQuote.getPrices().stream()
+                .filter(p -> p.getVolume() == 0).map(p -> BigDecimal.valueOf(p.getBid())).findFirst().get());
     }
 
     private static List<Quote> createCalcQuotes(Quote baseQuote) {

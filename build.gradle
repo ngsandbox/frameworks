@@ -39,6 +39,7 @@ subprojects {
         compile (group: 'ch.qos.logback', name: 'logback-core', version: project['logback.version'])
 
         compileOnly group: 'org.projectlombok', name: 'lombok', version: project['lombok.version']
+        annotationProcessor group: 'org.projectlombok', name: 'lombok', version: project['lombok.version']
 
         testCompile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version:  project['jackson.version']
         testCompile "org.junit.jupiter:junit-jupiter-api:5.0.0-M4"
@@ -46,5 +47,6 @@ subprojects {
         testCompile "org.junit.platform:junit-platform-launcher:1.0.0-M4"
 
         testCompileOnly group: 'org.projectlombok', name: 'lombok', version: project['lombok.version']
+        testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: project['lombok.version']
     }
 }
