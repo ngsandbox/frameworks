@@ -58,6 +58,12 @@
             <artifactId>animated-gif-lib</artifactId>
             <version>${animated.gif.lib.version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.json/json -->
+        <!--<dependency>-->
+            <!--<groupId>org.json</groupId>-->
+            <!--<artifactId>json</artifactId>-->
+        <!--</dependency>-->
+
     </dependencies>
 
 </project>

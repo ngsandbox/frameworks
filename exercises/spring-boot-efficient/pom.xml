@@ -5,10 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.justgifit</groupId>
-    <artifactId>just-gif-it-excercises</artifactId>
+    <artifactId>spring-boot-efficient</artifactId>
     <packaging>pom</packaging>
     <version>1.0</version>
-    <name>Multi Chapter Just gif it Parent Project</name>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
