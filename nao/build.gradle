@@ -7,5 +7,5 @@ sourceCompatibility = 1.8
 
 dependencies {
     // https://community.ald.softbankrobotics.com/en/resources/software/former-nao-versions-java-naoqi-sdk
-    compile files('./libs/java-naoqi-sdk-2.1.4.13-linux64.jar')
+    compile files('/opt/Aldebaran//java-naoqi-sdk-2.1.4.13-linux64.jar')
 }

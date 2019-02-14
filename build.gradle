@@ -38,6 +38,10 @@ subprojects {
         compile (group: 'ch.qos.logback', name: 'logback-classic', version: project['logback.version'])
         compile (group: 'ch.qos.logback', name: 'logback-core', version: project['logback.version'])
 
+// https://mvnrepository.com/artifact/com.googlecode.princeton-java-algorithms/algorithms
+        compile group: 'com.googlecode.princeton-java-algorithms', name: 'algorithms', version: '4.0.1'
+
+
         compileOnly group: 'org.projectlombok', name: 'lombok', version: project['lombok.version']
         annotationProcessor group: 'org.projectlombok', name: 'lombok', version: project['lombok.version']
 
@@ -48,5 +52,7 @@ subprojects {
 
         testCompileOnly group: 'org.projectlombok', name: 'lombok', version: project['lombok.version']
         testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: project['lombok.version']
+
+        testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.1.2.RELEASE'
     }
 }
