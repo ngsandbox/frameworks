@@ -1,6 +1,11 @@
 rootProject.name = 'ngsandbox'
 
-include 'common', 'hazelcast', 'zookeeper', 'nao', 'elastic', 'spring-rest'
+include 'common'
+include 'hazelcast'
+include 'zookeeper'
+include 'nao'
+include 'elastic'
+include 'spring-rest'
 include 'nlp'
 include 'face-recognition'
 include 'speechkit'

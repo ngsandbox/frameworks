@@ -4,6 +4,7 @@ import com.aldebaran.qi.Application;
 import com.aldebaran.qi.DynamicObjectBuilder;
 import com.aldebaran.qi.QiService;
 import com.aldebaran.qi.Session;
+import com.aldebaran.qi.helper.ALProxy;
 import com.aldebaran.qi.helper.proxies.ALMotion;
 import com.aldebaran.qi.helper.proxies.ALPhotoCapture;
 import com.aldebaran.qi.helper.proxies.ALTextToSpeech;
@@ -13,7 +14,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class Program {
 
-    public static String ROBOT_URL = "tcp://192.168.0.19:9559";
+    public static String ROBOT_URL = "tcp://192.168.0.14:9559";
 
     public static void main(String... args) throws Exception {
         // Create a new application
@@ -21,16 +22,16 @@ public class Program {
         //AnyObject alRobotModel = application.session().service("ALRobotModel");
         CompletableFuture<Void> future = new CompletableFuture<>();
         CompletableFuture.runAsync(() -> {
+        }).thenAccept(aVoid -> {
+            //takePhoto(application);
+        }).thenAccept(aVoid -> {
+            //advertise(application);
+        }).thenAccept(aVoid -> {
+            //moveTo(application);
             sayHelloToTheWorld(application);
-        }).thenAccept(aVoid -> {
-            takePhoto(application);
-        }).thenAccept(aVoid -> {
-            advertise(application);
-        }).thenAccept(aVoid -> {
-            moveTo(application);
         });
 
-        future.join();
+        //future.join();
         //sayHelloToTheWorld(application);
         //takePhoto(application);
         //advertise(application);
@@ -44,10 +45,12 @@ public class Program {
             // Create an ALTextToSpeech object and link it to your current session
             ALTextToSpeech tts = new ALTextToSpeech(application.session());
             tts.say("Привет! ");
-            for (int i = 5; i > 0; i--) {
+            //tts.say("Vt! My name is ROBOT");
+            //tts.say("Привет! ");
+            for (int i = 500000; i > 0; i--) {
                 // Make your robot say something
-                //tts.say("" + i);
-                //Thread.sleep(1000);
+                tts.say("" + i);
+                Thread.sleep(1000);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -88,10 +91,10 @@ public class Program {
             Session session = application.session();
             ALMotion motion = new ALMotion(session);
             if (!motion.robotIsWakeUp()) {
-                //motion.wakeUp();
+                motion.wakeUp();
             }
 
-            List<Float> robotPosition = motion.getRobotPosition(false);
+            List<Float> robotPosition = motion.getRobotPosition(true);
             float x = 10, y = 10, theta = 10;
             if (robotPosition != null && !robotPosition.isEmpty()) {
                 x = robotPosition.get(0);
