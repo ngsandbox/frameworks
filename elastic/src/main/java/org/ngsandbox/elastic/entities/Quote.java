@@ -16,10 +16,12 @@ import java.util.UUID;
 @Data
 public class Quote implements ElasticJson {
     private static final ObjectMapper MAPPER = new ObjectMapper();
+    @Builder.Default
     private String id = UUID.randomUUID().toString();
     private String symbol;
     private String tier;
 
+    @Builder.Default
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZZ")
     private Date created = new Date();
 

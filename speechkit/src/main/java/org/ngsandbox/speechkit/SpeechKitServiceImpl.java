@@ -38,11 +38,11 @@ public class SpeechKitServiceImpl implements SpeechService {
             log.debug("Result recognition {}", recognitionResult);
             if (!recognitionResult.getVariants().isEmpty()) {
                 Variant variant = recognitionResult.getVariants().get(0);
-                return new ResponseWrapper<>(new BaseResponse(variant.getValue()), "", ResponseStatus.OK);
+                return ResponseWrapper.fine(new BaseResponse(variant.getValue()));
             }
 
             log.warn("No variants was found for file {} ", adapter.getFilename());
-            return new ResponseWrapper<>(null, "The response from SpeechKit is empty", ResponseStatus.RESPONSE_ERROR);
+            return ResponseWrapper.fail(ResponseStatus.RESPONSE_ERROR, "The response from SpeechKit is empty");
         } catch (HttpError e) {
             errMsg = "Error to call SpeechKit server to process the file " + adapter.getFilename();
             log.error(errMsg, e);
@@ -51,6 +51,6 @@ public class SpeechKitServiceImpl implements SpeechService {
             log.error(errMsg, e);
         }
 
-        return new ResponseWrapper<>(null, errMsg, ResponseStatus.SERVER_ERROR);
+        return ResponseWrapper.fail(ResponseStatus.SERVER_ERROR, errMsg);
     }
 }
